@@ -50,20 +50,21 @@ class BinarySearchTree
   def include?(rating,node = @root)
     return false if node.nil? || node == 0
     return true if rating == node.rating
-    if rating < node.rating
-      include?(rating, node.left_child)
+    include?(rating, node.left_child)  if less_than_current_node?
+    include?(rating, node.right_child) if greater_than_current_node?
     else
-      include?(rating, node.right_child)
+
     end
+  end
+
+  def less_than_current_node?(node, rating)
+    rating < node.rating
   end
 
   def depth_of(rating, node = @root)
     return node.depth if node.rating == rating
-    if rating < node.rating
-      depth_of(rating, node.left_child)
-    else
-      depth_of(rating, node.right_child)
-    end
+    depth_of(rating, node.left_child)  if less_than_current_node?
+    depth_of(rating, node.right_child) if greater_than_current_node?
   end
 
   def min
@@ -80,7 +81,7 @@ class BinarySearchTree
   end
 
   def largest(node = @root)
-    return node if node.right_child == nil
+    return node unless node.right_child
     largest(node.right_child)
   end
 
@@ -118,7 +119,7 @@ class BinarySearchTree
     end
   end
 
-  def beautifier
+  def name_and_rating_pairs
     @sorted.map do |node|
       {node.name => node.rating}
     end

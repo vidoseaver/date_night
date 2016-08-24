@@ -34,9 +34,16 @@ class NodeTest < Minitest::Test
     assert_equal nil, @node1.left_child
     assert_equal nil, @node1.right_child
     @node1.decider(@node3)
+
     assert_instance_of Node, @node1.left_child
+
     @node1.decider(@node2)
+
     assert_instance_of Node, @node1.right_child
+
+    @node1.decider(@node3)
+
+    
   end
 
   def test_it_returns_the_childs_rating_if_the_spot_is_filled

@@ -20,39 +20,38 @@ class Node
   end
 
   def decider(node)
-    case
-    when left_child? == false && node.rating < rating
-      node.depth += 1
-      @left_child = node
-      node.depth
-    when right_child? == false && node.rating > rating
-      node.depth += 1
-      @right_child = node
-      node.depth
-    when node.rating < rating
-      node.depth += 1
-      @left_child
-    when node.rating > rating
-      node.depth += 1
-      @right_child
-    end
+    place_and_respond_left(node, "create child")   if matching_left_child_empty?(node)
+    add_to_right(node, "create child")  if matching_right_child_empty?(node)
+    add_to_left(node)                   if matching_left_child_full?(node)
+    add_to_right(node)                  if matching_right_child_full?(node)
   end
 
+  def matching_left_child_empty?(node)
+    left_child? == false && node.rating < rating
+  end
+
+  def matching_right_child_empty?(node)
+    right_child? == false && node.rating > rating
+  end
+
+  def add_to_right(node, create_indicator = nil)
+    node.depth += 1
+    @right_child = node
+    node.depth if create_indicator
+  end
+
+  def add_to_left(node, create_indicator = nil)
+    node.depth += 1
+    @left_child = node
+    node.depth if create_indicator
+  end
 
   def left_child?
-    if @left_child == nil
-      false
-    else
-      true
-    end
+    @left_child ? true : false
   end
 
   def right_child?
-    if @right_child == nil
-      false
-    else
-      true
-    end
+    @right_child ? true : false
   end
 
   def print
