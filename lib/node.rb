@@ -8,7 +8,9 @@ class Node
 
   attr_accessor :left_child,
                 :right_child,
-                :depth
+                :depth,
+                :node
+
 
   def initialize(rating,name)
     @rating = rating
@@ -20,39 +22,57 @@ class Node
   end
 
   def decider(node)
-    case
-    when left_child? == false && node.rating < rating
-      node.depth += 1
-      @left_child = node
-      node.depth
-    when right_child? == false && node.rating > rating
-      node.depth += 1
-      @right_child = node
-      node.depth
-    when node.rating < rating
-      node.depth += 1
+    @node = node
+    return place_child("left")   if left_child_empty?
+    return place_child("right")  if right_child_empty?
+    return return_child("left")  if left_child_filled?
+    return return_child("right") if right_child_filled?
+  end
+
+  def left_child_empty?
+    @node.rating < rating && left_child? == false
+  end
+
+  def right_child_empty?
+    @node.rating > rating && right_child? == false 
+  end
+
+  def left_child_filled?
+    @node.rating < rating && left_child?
+  end
+
+  def right_child_filled?
+    @node.rating > rating && right_child?
+  end
+
+  def place_child(direction)
+    if direction == "left"
+      @node.depth += 1
+      @left_child = @node
+      @node.depth
+    else
+      @node.depth += 1
+      @right_child = @node
+      @node.depth
+    end
+  end
+
+  def return_child(direction)
+    if direction == "left"
+      @node.depth += 1
       @left_child
-    when node.rating > rating
-      node.depth += 1
+    else
+      @node.depth += 1
       @right_child
     end
   end
 
-
   def left_child?
-    if @left_child == nil
-      false
-    else
-      true
-    end
+    @left_child ? true : false
   end
 
   def right_child?
-    if @right_child == nil
-      false
-    else
-      true
-    end
+    @right_child ? true : false
   end
 
   def print
