@@ -2,13 +2,16 @@ require "pry"
 require "./lib/node"
 
 class BinarySearchTree
-  attr_reader :root
+  attr_reader :root,
+              :nodes
 
   def initialize
     @node_count = 0
     @root = 0
     @nodes = Hash.new
     @sorted = Array.new
+    @stored = Array.new
+
   end
 
   def insert(rating,name)
@@ -84,11 +87,11 @@ class BinarySearchTree
     largest(node.right_child)
   end
 
-
   def sort(node = @root)
     return beautifier if @sorted.length == @nodes.length
     sort(node.left_child)if node.left_child?
     sort_colletor(node)
+    # print_resetter
     beautifier
   end
 
@@ -128,9 +131,53 @@ class BinarySearchTree
     file = File.open(path)
     file.readlines.each do |line|
       split = line.split(",")
-      insert(split.first,split.last.chomp)
+      insert(split.first.to_i,split.last.chomp)
     end
     @nodes.length
   end
+
+  def print_resetter
+    @nodes.each do |key,node|
+      node.reset_print
+    end
+  end
+
+  def find_all_children(node = @root)
+    if @stored.first == node && all_the_children_it_has_are_printed?(node)
+      stored = @stored
+      print_resetter
+      @stored = Array.new
+      return stored
+    end
+    @stored << node if node.printed? == false
+    node.print
+    if node.left_child? && node.left_child.printed? == false
+      find_all_children(node.left_child)
+    elsif node.right_child && node.right_child.printed? == false
+      find_all_children(node.right_child)
+    else
+      find_all_children(parent_finder(node))
+    end
+  end
+
+  def find_all_by_depth(depth)
+    @nodes.values.find_all {|node| node.depth == depth}
+  end
+
+  def health(depth)
+    nodes_to_survey = find_all_by_depth(depth)
+    nodes_to_survey.map do |node|
+      decendants = (find_all_children(node).length)
+      percent_of_family = ((decendants/@nodes.length.to_f)*100).floor
+      [node.rating, decendants,percent_of_family]
+    end
+  end
+
+  def all_the_children_it_has_are_printed?(node)
+    left_child = true if (node.left_child? && node.left_child.printed?) || !node.left_child?
+    right_child = true if (node.right_child? && node.right_child.printed?) || !node.right_child?
+    return true if left_child && right_child
+  end
+
 
 end

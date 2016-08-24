@@ -7,9 +7,7 @@ class BinarySearchTreeTest < Minitest::Test
 
   def setup
     @tree = BinarySearchTree.new
-
-
-
+    @tree2 = BinarySearchTree.new
 
     @node1 = Node.new(50, "a medoicre movie")
     @node2 = Node.new(75, "a decent movie")
@@ -110,7 +108,6 @@ class BinarySearchTreeTest < Minitest::Test
   end
 
   def test_parent_finder
-
     @tree.insert(61, "Bill & Ted's Excellent Adventure")
     @tree.insert(50, "Hannibal Buress: Animal Furnace")
     @tree.insert(16, "Johnny English")
@@ -119,12 +116,73 @@ class BinarySearchTreeTest < Minitest::Test
 
     assert_equal "Hannibal Buress: Animal Furnace", @tree.parent_finder(@tree.smallest).name
     assert_equal "Bill & Ted's Excellent Adventure", @tree.parent_finder(@tree.largest).name
-
   end
 
   def test_it_can_open_a_file
     assert_equal 99, @tree.load("movies.txt")
   end
 
+  def test_print_resetter
+    @tree.load("movies.txt")
+    refute @tree.nodes.values.first.printed?
+    @tree.print_resetter
+    refute @tree.nodes.values.first.printed?
+  end
 
+  def test_it_find_all_children
+    @tree.load("movies.txt")
+  end
+
+  def test_it_returns_array_of_children_by_node
+    @tree.load("movies.txt")
+
+    assert_equal 99, @tree.find_all_children(@tree.root).length
+    # @tree.print_resetter
+    assert_equal 70, @tree.find_all_children(@tree.root.left_child).length
+  end
+
+  def test_find_all_by_depth
+    @tree.load("movies.txt")
+
+    assert_instance_of Node, @tree.find_all_by_depth(0).first
+
+    assert_instance_of Node, @tree.find_all_by_depth(1).first
+    assert_instance_of Node, @tree.find_all_by_depth(1).last
+    assert_equal 2, @tree.find_all_by_depth(1).length
+  end
+
+  def test_it_returns_the_health_according_spec
+    
+    @tree.insert(98, "Animals United")
+    @tree.insert(58, "Armageddon")
+    @tree.insert(36, "Bill & Ted's Bogus Journey")
+    @tree.insert(93, "Bill & Ted's Excellent Adventure")
+    @tree.insert(86, "Charlie's Angels")
+    @tree.insert(38, "Charlie's Country")
+    @tree.insert(69, "Collateral Damage")
+
+    assert_equal [[98, 7, 100]],             @tree.health(0)
+    assert_equal [[58, 6, 85]],              @tree.health(1)
+    assert_equal [[36, 2, 28], [93, 3, 42]], @tree.health(2)
+  end
+
+  def test_all_the_children_it_has_returns_true_correctly
+    @tree.insert(61, "Bill & Ted's Excellent Adventure")
+    @tree.insert(50, "Hannibal Buress: Animal Furnace")
+    @tree.insert(16, "Johnny English")
+    @tree.insert(92, "Sharknado 3")
+    # @tree.insert(51, "depth 2 right child")
+
+    @tree.root.left_child.print
+    @tree.root.right_child.print
+    node = @tree.root
+    assert @tree.all_the_children_it_has_are_printed?(node)
+    @tree.print_resetter
+    refute @tree.all_the_children_it_has_are_printed?(node)
+    @tree.root.left_child.left_child.print
+    node = @tree.root.left_child
+    assert @tree.all_the_children_it_has_are_printed?(node)
+    @tree.print_resetter
+    refute @tree.all_the_children_it_has_are_printed?(node)
+  end
 end

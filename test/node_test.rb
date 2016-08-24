@@ -45,9 +45,16 @@ class NodeTest < Minitest::Test
   end
 
   def test_printing_changes_printed_to_true
+
+  end
+
+  def test_reset_print
     refute @node1.printed?
     assert @node1.print
     assert @node1.printed?
+    @node1.reset_print
+    refute @node1.printed?
   end
+
 
 end

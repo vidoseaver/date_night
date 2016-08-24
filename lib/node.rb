@@ -2,13 +2,13 @@ require "pry"
 
 class Node
 
-  attr_reader :rating,
-              :name
-              :printed
+  attr_reader   :rating,
+                :name,
+                :print
+
   attr_accessor :left_child,
                 :right_child,
                 :depth
-                :print
 
   def initialize(rating,name)
     @rating = rating
@@ -59,8 +59,11 @@ class Node
     @printed = true
   end
 
+  def reset_print
+    @printed = false
+  end
+
   def printed?
     @printed
   end
-
 end
