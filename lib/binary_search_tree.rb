@@ -21,7 +21,7 @@ class BinarySearchTree
       @nodes[rating] = @root
       @root.depth
     else
-      passer(rating,name) #method to pass root the new node
+      passer(rating,name)
     end
   end
 
@@ -91,7 +91,7 @@ class BinarySearchTree
     return beautifier if @sorted.length == @nodes.length
     sort(node.left_child)if node.left_child?
     sort_colletor(node)
-    # print_resetter
+    print_resetter
     beautifier
   end
 
