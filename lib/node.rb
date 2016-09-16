@@ -30,11 +30,11 @@ class Node
   end
 
   def left_child_empty?
-    @node.rating < rating && left_child? == false
+    @node.rating < rating   && left_child? == false
   end
 
   def right_child_empty?
-    @node.rating > rating && right_child? == false 
+    @node.rating > rating && right_child? == false
   end
 
   def left_child_filled?
@@ -68,7 +68,8 @@ class Node
   end
 
   def left_child?
-    @left_child ? true : false
+    #@left_child ? true : false
+    !!@left_child
   end
 
   def right_child?

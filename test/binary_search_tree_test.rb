@@ -71,9 +71,10 @@ class BinarySearchTreeTest < Minitest::Test
     @tree.insert(16, "Johnny English")
     @tree.insert(92, "Sharknado 3")
     @tree.insert(50, "Hannibal Buress: Animal Furnace")
-    hash = Hash.new
-    hash["Sharknado 3"] = 92
-    assert_equal hash, @tree.max
+    # hash = Hash.new
+    # hash["Sharknado 3"] = 92
+    expected = {"Sharknado 3" => 92}
+    assert_equal expected, @tree.max
   end
 
   def test_it_knows_the_min
@@ -152,7 +153,7 @@ class BinarySearchTreeTest < Minitest::Test
   end
 
   def test_it_returns_the_health_according_spec
-    
+
     @tree.insert(98, "Animals United")
     @tree.insert(58, "Armageddon")
     @tree.insert(36, "Bill & Ted's Bogus Journey")
